@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Consumo de Energia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input {
+            margin: 5px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        h2 {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadora de Consumo de Energia</h1>
+    
+    <label for="potencia">Potência do aparelho (W):</label>
+    <input type="number" id="potencia" placeholder="Ex: 1000" required><br><br>
+
+    <label for="horas">Horas de uso por dia:</label>
+    <input type="number" id="horas" placeholder="Ex: 5" required><br><br>
+
+    <label for="dias">Dias de uso por mês:</label>
+    <input type="number" id="dias" placeholder="Ex: 30" required><br><br>
+
+    <label for="preco">Preço do kWh (R$):</label>
+    <input type="number" step="0.01" id="preco" placeholder="Ex: 0.60" required><br><br>
+
+    <button onclick="calcular()">Calcular Consumo</button>
+
+    <h2>Resultado:</h2>
+    <p id="resultado"></p>
+    <p id="sugestao"></p>
+
+    <script>
+        function calcular() {
+            // Obtendo os valores de entrada
+            const potencia = document.getElementById('potencia').value;
+            const horas = document.getElementById('horas').value;
+            const dias = document.getElementById('dias').value;
+            const preco = document.getElementById('preco').value;
+
+            // Validação dos dados de entrada
+            if (!potencia || !horas || !dias || !preco) {
+                document.getElementById('resultado').innerHTML = "Por favor, preencha todos os campos.";
+                document.getElementById('sugestao').innerHTML = "";
+                return;
+            }
+
+            // Convertendo as entradas para números
+            const potenciaNum = parseFloat(potencia);
+            const horasNum = parseFloat(horas);
+            const diasNum = parseFloat(dias);
+            const precoNum = parseFloat(preco);
+
+            // Cálculo do consumo mensal em kWh
+            const consumoKwhMes = (potenciaNum / 1000) * horasNum * diasNum;
+            const custoMensal = consumoKwhMes * precoNum;
+
+            // Exibindo o resultado
+            document.getElementById('resultado').innerHTML = `
+                Consumo mensal: ${consumoKwhMes.toFixed(2)} kWh<br>
+                Custo mensal: R$ ${custoMensal.toFixed(2)}
+            `;
+
+            // Sugestões de economia de energia
+            let sugestao = "";
+            if (horasNum > 6) {
+                sugestao = `Tente reduzir o uso diário do aparelho de ${horasNum} horas para economizar energia.`;
+            } else if (potenciaNum > 1000) {
+                sugestao = "Considere utilizar aparelhos mais eficientes energeticamente.";
+            } else {
+                sugestao = "Seu uso de energia está eficiente, mas sempre é possível reduzir o tempo de uso.";
+            }
+
+            // Exibindo a sugestão
+            document.getElementById('sugestao').innerHTML = sugestao;
+        }
+    </script>
+</body>
+</html>
